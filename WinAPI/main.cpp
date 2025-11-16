@@ -99,7 +99,8 @@ LRESULT CALLBACK Placeholder(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_SETFOCUS:
-		if (data->isShowingPlaceholder) {
+		if (data->isShowingPlaceholder) 
+		{
 			data->isShowingPlaceholder = false;
 			SetWindowTextA(hWnd, "");
 			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(0, 0, 0)); ReleaseDC(hWnd, hdc);
@@ -107,7 +108,8 @@ LRESULT CALLBACK Placeholder(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_KILLFOCUS:
-		if (GetWindowTextLength(hWnd) == 0 && !data->isShowingPlaceholder) {
+		if (GetWindowTextLength(hWnd) == 0 && !data->isShowingPlaceholder) 
+		{
 			data->isShowingPlaceholder = true;
 			SetWindowTextA(hWnd, data->placeholderText);
 			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(128, 128, 128)); ReleaseDC(hWnd, hdc);
@@ -115,7 +117,8 @@ LRESULT CALLBACK Placeholder(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_CHAR:
-		if (data->isShowingPlaceholder) {
+		if (data->isShowingPlaceholder) 
+		{
 			data->isShowingPlaceholder = false;
 			SetWindowTextA(hWnd, "");
 			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(0, 0, 0)); ReleaseDC(hWnd, hdc);
@@ -124,7 +127,8 @@ LRESULT CALLBACK Placeholder(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_KEYDOWN: case WM_PASTE:
-		if (data->isShowingPlaceholder) {
+		if (data->isShowingPlaceholder) 
+		{
 			data->isShowingPlaceholder = false;
 			SetWindowTextA(hWnd, "");
 			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(0, 0, 0)); ReleaseDC(hWnd, hdc);
