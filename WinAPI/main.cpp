@@ -1,11 +1,11 @@
-#include<Windows.h>
+Ôªø#include<Windows.h>
 #include"resource.h"
 
 struct EditData 
 {
-	const char* placeholderText;	//”Í‡Á‡ÚÂÎ¸ Ì‡ ÚÂÍÒÚ ÔÓ‰ÒÍ‡ÁÍË
-	WNDPROC originalProcedure;		//”Í‡Á‡ÚÂÎ¸ Ì‡ ÓË„ËÌ‡Î
-	bool isShowingPlaceholder;		//œÓ‚ÂÍ‡ ÔÎ˝ÈÒıÓÎ‰Â‡
+	const char* placeholderText;	//–£–∫–∞–∑–∞—Ç–µ–ª—å –Ω–∞ —Ç–µ–∫—Å—Ç –ø–æ–¥—Å–∫–∞–∑–∫–∏
+	WNDPROC originalProcedure;		//–£–∫–∞–∑–∞—Ç–µ–ª—å –Ω–∞ –æ—Ä–∏–≥–∏–Ω–∞–ª
+	bool isShowingPlaceholder;		//–ü—Ä–æ–≤–µ—Ä–∫–∞ –ø–ª—ç–π—Å—Ö–æ–ª–¥–µ—Ä–∞
 };
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wPAram, LPARAM lParam);
@@ -31,17 +31,17 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	switch (uMsg)
 	{
-	case WM_INITDIALOG:	//¬˚ÔÓÎÌˇÂÚÒˇ 1 ‡Á, ÔË Á‡ÔÛÒÍÂ ÓÍÌ‡.
+	case WM_INITDIALOG:	//–í—ã–ø–æ–ª–Ω—è–µ—Ç—Å—è 1 —Ä–∞–∑, –ø—Ä–∏ –∑–∞–ø—É—Å–∫–µ –æ–∫–Ω–∞.
 	{
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
 		//SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));
-		AddPlaceholder(GetDlgItem(hwnd, IDC_EDIT_LOGIN), "¬‚Â‰ËÚÂ ÎÓ„ËÌ");
-		AddPlaceholder(GetDlgItem(hwnd, IDC_EDIT_PASSWORD), "¬‚Â‰ËÚÂ Ô‡ÓÎ¸");
+		AddPlaceholder(GetDlgItem(hwnd, IDC_EDIT_LOGIN), "–í–≤–µ–¥–∏—Ç–µ –ª–æ–≥–∏–Ω");
+		AddPlaceholder(GetDlgItem(hwnd, IDC_EDIT_PASSWORD), "–í–≤–µ–¥–∏—Ç–µ –ø–∞—Ä–æ–ª—å");
 	}
 	break;
 
-	case WM_COMMAND:	//Œ·‡·‡Ú˚‚‡ÂÚ ÍÓÏ‡Ì‰˚ Ò ÍÎ‡‚Ë‡ÚÛ˚ Ë Ï˚¯Ë.
+	case WM_COMMAND:	//–û–±—Ä–∞–±–∞—Ç—ã–≤–∞–µ—Ç –∫–æ–º–∞–Ω–¥—ã —Å –∫–ª–∞–≤–∏–∞—Ç—É—Ä—ã –∏ –º—ã—à–∏.
 		switch (LOWORD(wParam))
 		{
 		case IDC_BUTTON_COPY:
@@ -63,45 +63,45 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 		case IDOK:
-			MessageBox(NULL, "¡˚Î‡ Ì‡Ê‡Ú‡ ÍÌÓÔÍ‡ 'OK'", "Info", MB_OK | MB_ICONINFORMATION);
+			MessageBox(NULL, "–ë—ã–ª–∞ –Ω–∞–∂–∞—Ç–∞ –∫–Ω–æ–ø–∫–∞ 'OK'", "Info", MB_OK | MB_ICONINFORMATION);
 			break;
 		case IDCANCEL:
 			EndDialog(hwnd, 0);
 			break;
 		}
 		break;
-	case WM_CLOSE:		//¬˚ÔÓÎÌˇÂÚÒˇ ÔË Ì‡Ê‡ÚËË ÍÌÓÔÍË 'x'.
+	case WM_CLOSE:		//–í—ã–ø–æ–ª–Ω—è–µ—Ç—Å—è –ø—Ä–∏ –Ω–∞–∂–∞—Ç–∏–∏ –∫–Ω–æ–ø–∫–∏ 'x'.
 		EndDialog(hwnd, 0);
 	}
-	//»ÁÏÂÌÂÌËˇ ‚ ÍÓ‰Â----------------------------------------------------------------------------------------------------------------
-	EditData* data = (EditData*)GetWindowLongPtr(hwnd, GWLP_USERDATA);	//œÓÎÛ˜ËÎ ‰‡ÌÌ˚Â ËÁ USERDATA
-	if (!data) return DefWindowProc(hwnd, uMsg, wParam, lParam);		//≈ÒÎË ‰‡ÌÌ˚ı ÌÂÚ - ‚˚Á˚‚‡ÂÚÒˇ ÒÚ‡Ì‰‡ÚÌ‡ˇ Ó·‡·ÓÚÍ‡
-	switch (uMsg)	//Œ·‡·‡Ú˚‚‡˛ ÒÓÓ·˘ÂÌËˇ windows
+	//–ò–∑–º–µ–Ω–µ–Ω–∏—è –≤ –∫–æ–¥–µ----------------------------------------------------------------------------------------------------------------
+	EditData* data = (EditData*)GetWindowLongPtr(hwnd, GWLP_USERDATA);	//–ü–æ–ª—É—á–∏–ª –¥–∞–Ω–Ω—ã–µ –∏–∑ USERDATA
+	if (!data) return DefWindowProc(hwnd, uMsg, wParam, lParam);		//–ï—Å–ª–∏ –¥–∞–Ω–Ω—ã—Ö –Ω–µ—Ç - –≤—ã–∑—ã–≤–∞–µ—Ç—Å—è —Å—Ç–∞–Ω–¥–∞—Ä—Ç–Ω–∞—è –æ–±—Ä–∞–±–æ—Ç–∫–∞
+	switch (uMsg)	//–û–±—Ä–∞–±–∞—Ç—ã–≤–∞—é —Å–æ–æ–±—â–µ–Ω–∏—è windows
 	{
-	case WM_SETFOCUS:	//ŒÍÌÓ ÔÓÎÛ˜‡ÂÚ ÙÓÍÛÒ ‚‚Ó‰‡
+	case WM_SETFOCUS:	//–û–∫–Ω–æ –ø–æ–ª—É—á–∞–µ—Ç —Ñ–æ–∫—É—Å –≤–≤–æ–¥–∞
 		if (data->isShowingPlaceholder)
 		{
-			data->isShowingPlaceholder = false;	//”·‡Î ÔÓ‰ÒÍ‡ÁÍÛ
-			SetWindowTextA(hwnd, "");	//Œ˜ËÒÚËÎ ÚÂÍÒÚ
+			data->isShowingPlaceholder = false;	//–£–±—Ä–∞–ª –ø–æ–¥—Å–∫–∞–∑–∫—É
+			SetWindowTextA(hwnd, "");	//–û—á–∏—Å—Ç–∏–ª —Ç–µ–∫—Å—Ç
 		}
 		break;
-	case WM_KILLFOCUS:	//ŒÍÌÓ ÚÂˇÂÚ ÙÓÍÛÒ ‚‚Ó‰‡
-		if (GetWindowTextLength(hwnd) == 0 && !data->isShowingPlaceholder)	//≈ÒÎË ÓÌÓ ÔÛÒÚÓÂ Ë ÔÓ‰ÒÍ‡ÁÍ‡ ÌÂ ÓÚÓ·‡Ê‡ÂÚÒˇ
+	case WM_KILLFOCUS:	//–û–∫–Ω–æ —Ç–µ—Ä—è–µ—Ç —Ñ–æ–∫—É—Å –≤–≤–æ–¥–∞
+		if (GetWindowTextLength(hwnd) == 0 && !data->isShowingPlaceholder)	//–ï—Å–ª–∏ –æ–Ω–æ –ø—É—Å—Ç–æ–µ –∏ –ø–æ–¥—Å–∫–∞–∑–∫–∞ –Ω–µ –æ—Ç–æ–±—Ä–∞–∂–∞–µ—Ç—Å—è
 		{
-			data->isShowingPlaceholder = true;	//œÓÍ‡Á˚‚‡˛ ÔÓ‰ÒÍ‡ÁÍÛ ÓÔˇÚ¸
-			SetWindowTextA(hwnd, data->placeholderText);	//”ÒÚ‡Ì‡‚ÎË‚‡˛ ÚÂÍÒÚ ÔÓ‰ÒÍ‡ÁÍË
+			data->isShowingPlaceholder = true;	//–ü–æ–∫–∞–∑—ã–≤–∞—é –ø–æ–¥—Å–∫–∞–∑–∫—É –æ–ø—è—Ç—å
+			SetWindowTextA(hwnd, data->placeholderText);	//–£—Å—Ç–∞–Ω–∞–≤–ª–∏–≤–∞—é —Ç–µ–∫—Å—Ç –ø–æ–¥—Å–∫–∞–∑–∫–∏
 		}
 		break;
 	}
-	return CallWindowProc(data->originalProcedure, hwnd, uMsg, wParam, lParam); //ƒÎˇ ‚ÒÂı ÓÒÚ‡Î¸Ì˚ı ÒÓÓ·˘ÂÌËÈ ‚˚Á˚‚‡˛ ÓË„ËÌ‡Î¸ÌÛ˛ ÔÓˆÂ‰ÛÛ
+	return CallWindowProc(data->originalProcedure, hwnd, uMsg, wParam, lParam); //–î–ª—è –≤—Å–µ—Ö –æ—Å—Ç–∞–ª—å–Ω—ã—Ö —Å–æ–æ–±—â–µ–Ω–∏–π –≤—ã–∑—ã–≤–∞—é –æ—Ä–∏–≥–∏–Ω–∞–ª—å–Ω—É—é –ø—Ä–æ—Ü–µ–¥—É—Ä—É
 }
 void AddPlaceholder(HWND hEdit, const char* placeholderText)
 {
-	EditData* data = new EditData;				//—ÓÁ‰‡Î ÌÓ‚Û˛ ÒÚÛÍÚÛÛ ‰‡ÌÌ˚ı ‰Îˇ ı‡ÌÂÌËˇ ÒÓÒÚÓˇÌËˇ placeholder'a
-	data->placeholderText = placeholderText;	//—Óı‡ÌËÎ ÚÂÍÒÚ
-	data->isShowingPlaceholder = true;			//œÓÍ‡Á‡Î Ì‡ÎË˜ËÂ ˝ÚÓ„Ó ÚÂÍÒÚ‡
-	data->originalProcedure = (WNDPROC)GetWindowLongPtr(hEdit, GWLP_WNDPROC);//ÒÓı‡ÌËÎ ÓË„ËÌ‡Î Edit control'a	SetWindowLongPtr(hEdit, GWLP_USERDATA, (LONG_PTR)data);//
-	SetWindowLongPtr(hEdit, GWLP_USERDATA, (LONG_PTR)data);//—Óı‡ÌËÎ ÛÍ‡Á‡ÚÂÎ¸ Ì‡ ÒÚÛÍÚÛÛ ‚ USERDATA ÓÍÌ‡
-	SetWindowLongPtr(hEdit, GWLP_WNDPROC, (LONG_PTR)DlgProc);//«‡ÏÂÌËÎ ÓÍÓÌÌÛ˛ ÔÓˆÂ‰ÛÛ Ì‡ ÌÓ‚Û˛
-	SetWindowText(hEdit, placeholderText);		//”ÒÚ‡ÌÓ‚ËÎ ÚÂÍÒÚ ÔÓ‰ÒÍ‡ÁÍË ‚ ÔÓÎÂ ‚‚Ó‰‡
+	EditData* data = new EditData;				//–°–æ–∑–¥–∞–ª –Ω–æ–≤—É—é —Å—Ç—Ä—É–∫—Ç—É—Ä—É –¥–∞–Ω–Ω—ã—Ö –¥–ª—è —Ö—Ä–∞–Ω–µ–Ω–∏—è —Å–æ—Å—Ç–æ—è–Ω–∏—è placeholder'a
+	data->placeholderText = placeholderText;	//–°–æ—Ö—Ä–∞–Ω–∏–ª —Ç–µ–∫—Å—Ç
+	data->isShowingPlaceholder = true;			//–ü–æ–∫–∞–∑–∞–ª –Ω–∞–ª–∏—á–∏–µ —ç—Ç–æ–≥–æ —Ç–µ–∫—Å—Ç–∞
+	data->originalProcedure = (WNDPROC)GetWindowLongPtr(hEdit, GWLP_WNDPROC);//—Å–æ—Ö—Ä–∞–Ω–∏–ª –æ—Ä–∏–≥–∏–Ω–∞–ª Edit control'a	SetWindowLongPtr(hEdit, GWLP_USERDATA, (LONG_PTR)data);//
+	SetWindowLongPtr(hEdit, GWLP_USERDATA, (LONG_PTR)data);//–°–æ—Ö—Ä–∞–Ω–∏–ª —É–∫–∞–∑–∞—Ç–µ–ª—å –Ω–∞ —Å—Ç—Ä—É–∫—Ç—É—Ä—É –≤ USERDATA –æ–∫–Ω–∞
+	SetWindowLongPtr(hEdit, GWLP_WNDPROC, (LONG_PTR)DlgProc);//–ó–∞–º–µ–Ω–∏–ª –æ–∫–æ–Ω–Ω—É—é –ø—Ä–æ—Ü–µ–¥—É—Ä—É –Ω–∞ –Ω–æ–≤—É—é
+	SetWindowText(hEdit, placeholderText);		//–£—Å—Ç–∞–Ω–æ–≤–∏–ª —Ç–µ–∫—Å—Ç –ø–æ–¥—Å–∫–∞–∑–∫–∏ –≤ –ø–æ–ª–µ –≤–≤–æ–¥–∞
 }
