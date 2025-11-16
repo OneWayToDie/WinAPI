@@ -3,9 +3,9 @@
 
 struct EditData 
 {
-	const char* placeholderText;
-	WNDPROC originalProcedure;
-	bool isShowingPlaceholder;
+	const char* placeholderText;	//Указатель на текст подсказки
+	WNDPROC originalProcedure;		//Указатель на оригинал
+	bool isShowingPlaceholder;		//Проверка плэйсхолдера
 };
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wPAram, LPARAM lParam);
@@ -79,73 +79,44 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void AddPlaceholder(HWND hEdit, const char* placeholderText)
 {
-	EditData* data = new EditData;
-	data->placeholderText = placeholderText;
-	data->isShowingPlaceholder = true;
-	data->originalProcedure = (WNDPROC)GetWindowLongPtr(hEdit, GWLP_WNDPROC);
-	SetWindowLongPtr(hEdit, GWLP_USERDATA, (LONG_PTR)data);
-	SetWindowLongPtr(hEdit, GWLP_WNDPROC, (LONG_PTR)Placeholder);
-	SetWindowText(hEdit, placeholderText);
-	HDC hdc = GetDC(hEdit);
-	SetTextColor(hdc, RGB(128, 128, 128));
-	ReleaseDC(hEdit, hdc);
+	EditData* data = new EditData;				//Создал новую структуру данных для хранения состояния placeholder'a
+	data->placeholderText = placeholderText;	//Сохранил текст
+	data->isShowingPlaceholder = true;			//Показал наличие этого текста
+	data->originalProcedure = (WNDPROC)GetWindowLongPtr(hEdit, GWLP_WNDPROC);//сохранил оригинал Edit control'a	SetWindowLongPtr(hEdit, GWLP_USERDATA, (LONG_PTR)data);//
+	SetWindowLongPtr(hEdit, GWLP_USERDATA, (LONG_PTR)data);//Сохранил указатель на структуру в USERDATA окна
+	SetWindowLongPtr(hEdit, GWLP_WNDPROC, (LONG_PTR)Placeholder);//Заменил оконную процедуру на новую
+	SetWindowText(hEdit, placeholderText);		//Установил текст подсказки в поле ввода
 }
-
 LRESULT CALLBACK Placeholder(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	EditData* data = (EditData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-	if (!data) return DefWindowProc(hWnd, uMsg, wParam, lParam);
-
-	switch (uMsg)
+	EditData* data = (EditData*)GetWindowLongPtr(hWnd, GWLP_USERDATA);	//Получил данные из USERDATA
+	if (!data) return DefWindowProc(hWnd, uMsg, wParam, lParam);		//Если данных нет - вызывается стандартная обработка
+	switch (uMsg)	//Обрабатываю сообщения windows
 	{
-	case WM_SETFOCUS:
-		if (data->isShowingPlaceholder) 
+	case WM_SETFOCUS:	//Окно получает фокус ввода
+		if (data->isShowingPlaceholder)
 		{
-			data->isShowingPlaceholder = false;
-			SetWindowTextA(hWnd, "");
-			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(0, 0, 0)); ReleaseDC(hWnd, hdc);
+			data->isShowingPlaceholder = false;	//Убрал подсказку
+			SetWindowTextA(hWnd, "");	//Очистил текст
 		}
 		break;
-
-	case WM_KILLFOCUS:
-		if (GetWindowTextLength(hWnd) == 0 && !data->isShowingPlaceholder) 
+	case WM_KILLFOCUS:	//Окно теряет фокус ввода
+		if (GetWindowTextLength(hWnd) == 0 && !data->isShowingPlaceholder)	//Если оно пустое и подсказка не отображается
 		{
-			data->isShowingPlaceholder = true;
-			SetWindowTextA(hWnd, data->placeholderText);
-			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(128, 128, 128)); ReleaseDC(hWnd, hdc);
+			data->isShowingPlaceholder = true;	//Показываю подсказку опять
+			SetWindowTextA(hWnd, data->placeholderText);	//Устанавливаю текст подсказки
 		}
 		break;
-
-	case WM_CHAR:
-		if (data->isShowingPlaceholder) 
-		{
-			data->isShowingPlaceholder = false;
-			SetWindowTextA(hWnd, "");
-			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(0, 0, 0)); ReleaseDC(hWnd, hdc);
-			return (wParam == VK_BACK) ? 0 : CallWindowProc(data->originalProcedure, hWnd, uMsg, wParam, lParam);
-		}
-		break;
-
-	case WM_KEYDOWN: case WM_PASTE:
-		if (data->isShowingPlaceholder) 
-		{
-			data->isShowingPlaceholder = false;
-			SetWindowTextA(hWnd, "");
-			HDC hdc = GetDC(hWnd); SetTextColor(hdc, RGB(0, 0, 0)); ReleaseDC(hWnd, hdc);
-		}
-		break;
-
-	case WM_GETTEXT:
-		if (data->isShowingPlaceholder && lParam) ((char*)lParam)[0] = '\0';
-		return data->isShowingPlaceholder ? 0 : CallWindowProc(data->originalProcedure, hWnd, uMsg, wParam, lParam);
-
-	case WM_GETTEXTLENGTH:
-		return data->isShowingPlaceholder ? 0 : CallWindowProc(data->originalProcedure, hWnd, uMsg, wParam, lParam);
-
-	case WM_DESTROY:
-		delete data; SetWindowLongPtr(hWnd, GWLP_USERDATA, 0); return 0;
+	//case WM_CHAR:	//Если пользователь вводит символ
+	//	if (data->isShowingPlaceholder)
+	//	{
+	//		data->isShowingPlaceholder = false;	//Убираю подсказку при вводе
+	//		SetWindowTextA(hWnd, "");
+	//		return (wParam == VK_BACK) ? 0 : CallWindowProc(data->originalProcedure, hWnd, uMsg, wParam, lParam);//Если не Backspace - передаю символ дальше
+	//	}
+	//	break;
 	}
-	return CallWindowProc(data->originalProcedure, hWnd, uMsg, wParam, lParam);
+	return CallWindowProc(data->originalProcedure, hWnd, uMsg, wParam, lParam); //Для всех остальных сообщений вызываю оригинальную процедуру
 }
  
  
