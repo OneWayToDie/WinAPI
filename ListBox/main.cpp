@@ -1,19 +1,37 @@
 #include<Windows.h>
 #include"resource.h"
 
+
 CONST CHAR* g_sz_VALUES[] = 
 { 
-"There never has been any choice for me", 
-"Loneliness in all I have", 
-"There never has never been any light in my life", 
-"Darkness is all I have", 
-"My life is pointing in one direction, I see it now", 
-"I don't understand, I don’t understand people", 
-"Why do they want to live, why do they want to live?", 
-"I don't understand, I don't understand them", 
-"Why do they run from me, why do they run from me?", 
-"There never has been peace in my mind Hatred is all I have, hatred is all I feel", 
-"There never has been any choice for me Loneliness is all I have, loneliness is all I feel" 
+			"Сигаретный дым клубится в темноте",
+		   "Призраки прошлого шепчутся во мгле",
+		   "Одинокий вечер, тишина в квартире",
+		   "Вспоминаю тех, кого больше нет в мире",
+		   "Курю с призраками, разговариваю с тенями",
+		   "Ошибки молодости, мы стали чужими",
+		   "Курю с призраками, в дыму растворяюсь",
+		   "С каждым вдохом с прошлым прощаюсь",
+		   "Пепел опадает на старый паркет",
+		   "В памяти оживают былые сюжеты",
+		   "Тени улыбаются, жесты знакомые",
+		   "Разговоры о чём-то важном и простом",
+		   "Курю с призраками, разговариваю с тенями",
+		   "Ошибки молодости, мы стали чужими",
+		   "Курю с призраками, в дыму растворяюсь",
+		   "С каждым вдохом с прошлым прощаюсь",
+		   "Ночь длится бесконечно, время остановилось",
+		   "С каждым призраком стало так легко и горько",
+		   "Обещания, которые мы не сдержали",
+		   "Мечты, что навсегда в прошлом остались",
+		   "Курю с призраками, разговариваю с тенями",
+		   "Ошибки молодости, мы стали чужими",
+		   "Курю с призраками, в дыму растворяюсь",
+		   "С каждым вдохом с прошлым прощаюсь",
+		   "Рассвет приближается, призраки тают",
+		   "Вместе с сигаретным дымом исчезают",
+		   "Но знаю, что завтра снова наступят сумерки",
+		   "И мы продолжим наши тихие беседы"
 };	//Объявил глобальный массив строк
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
