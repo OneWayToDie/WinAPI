@@ -120,7 +120,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			//Здесь произвожу логику для кнопки Delete
 			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
-			int index = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
+			int index = SendMessage(hList, LB_GETCURSEL, 0, 0);
 			SendMessage(hList, LB_DELETESTRING, index, 0);
 		}
 		break;
