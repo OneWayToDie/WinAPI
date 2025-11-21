@@ -14,7 +14,7 @@ CONST CHAR* g_sz_VALUES[] =
 "Why do they run from me, why do they run from me?", 
 "There never has been peace in my mind Hatred is all I have, hatred is all I feel", 
 "There never has been any choice for me Loneliness is all I have, loneliness is all I feel" 
-};
+};	//ќбъ€вил глобальный массив строк
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -33,7 +33,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if (GetDlgItem(hwnd, IDC_LIST1) != NULL)
 		{
-			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+			HWND hList = GetDlgItem(hwnd, IDC_LIST1);	//√лавное окно - заполнил LB начальными значени€ми
 			for (int i = 0; i < sizeof(g_sz_VALUES) / sizeof(g_sz_VALUES[0]); i++)
 			{
 				SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)g_sz_VALUES[i]);
@@ -41,7 +41,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		else if (GetDlgItem(hwnd, IDC_EDIT) != NULL)
 		{
-			if (lParam != 0)
+			if (lParam != 0)	//”станавливаю переданный текст
 			{
 				SetDlgItemText(hwnd, IDC_EDIT, (LPCSTR)lParam);
 			}
@@ -56,6 +56,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			if (GetDlgItem(hwnd, IDC_LIST1) != NULL)
 			{
+				//ѕоказываю информацию о выбранном элементе
 				HWND hList = GetDlgItem(hwnd, IDC_LIST1);
 				int index = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
 				if (index != LB_ERR)
@@ -73,6 +74,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			else if (GetDlgItem(hwnd, IDC_EDIT) != NULL)
 			{
+				//ќкно редактировани€: —охран€ю изменени€
 				char text[256];
 				GetDlgItemText(hwnd, IDC_EDIT, text, sizeof(text));
 
@@ -80,6 +82,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				HWND hList = GetDlgItem(hMain, IDC_LIST1);
 				int index = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
 
+				//«десь произвожу замену элемента, удал€ю старый и добавл€ю новый
 				SendMessage(hList, LB_DELETESTRING, index, 0);
 				SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)text);
 				SendMessage(hList, LB_SETCURSEL, index, 0);
@@ -90,12 +93,14 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 		case IDC_ADD:
 		{
+			//«десь произвожу логику дл€ кнопки ADD
 			HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hwnd, GWLP_HINSTANCE);
 			DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_EDIT_WINDOW), hwnd, (DLGPROC)DlgProc, 0);
 		}
 		break;
 		case IDC_DELETE:
 		{
+			//«десь произвожу логику дл€ кнопки Delete
 			HWND hList = GetDlgItem(hwnd, IDC_LIST1);
 			int index = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
 			SendMessage(hList, LB_DELETESTRING, index, 0);
@@ -104,6 +109,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_LIST1:
 			if (HIWORD(wParam) == LBN_DBLCLK)
 			{
+				//ƒвойной щелчок - открывает окно редактировани€ выбранного элемента
 				HWND hList = GetDlgItem(hwnd, IDC_LIST1);
 				int index = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
 				if (index != LB_ERR)
