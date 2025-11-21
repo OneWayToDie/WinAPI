@@ -1,32 +1,32 @@
-#define _CRT_SECURE_NO_WARNINGS //Отключаю предупреждения о небезопасных функциях CRT
+п»ї#define _CRT_SECURE_NO_WARNINGS //РћС‚РєР»СЋС‡Р°СЋ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёСЏ Рѕ РЅРµР±РµР·РѕРїР°СЃРЅС‹С… С„СѓРЅРєС†РёСЏС… CRT
 #include<Windows.h>
 #include<mmsystem.h>
 #include<string>
 #include"resource.h"
-#pragma comment(lib, "winmm.lib")   //Директива, автоматически подключающая библиотеку winmm.lib для мультимедийных функций
+#pragma comment(lib, "winmm.lib")   //Р”РёСЂРµРєС‚РёРІР°, Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїРѕРґРєР»СЋС‡Р°СЋС‰Р°СЏ Р±РёР±Р»РёРѕС‚РµРєСѓ winmm.lib РґР»СЏ РјСѓР»СЊС‚РёРјРµРґРёР№РЅС‹С… С„СѓРЅРєС†РёР№
 
 CONST CHAR* g_sz_VALUES[] =
 {
 "Decalius - Loneliness",
 "P.O.D. - Youth of the Nation",
-"Reka — Life Long Tragedy",
+"Reka вЂ” Life Long Tragedy",
 "takizava cold mental",
-"Deer Death — Melt Into You",
-"Никто Не Против - Курю с призраками",
-};	//Массив из названий песен
+"Deer Death вЂ” Melt Into You",
+"РќРёРєС‚Рѕ РќРµ РџСЂРѕС‚РёРІ - РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё",
+};	//РњР°СЃСЃРёРІ РёР· РЅР°Р·РІР°РЅРёР№ РїРµСЃРµРЅ
 
 struct SongData
 {
-	const char* songName;//Название песни
-	const char* songText;//Текст
-	const char* filePath;//Путь к файлу
+	const char* songName;//РќР°Р·РІР°РЅРёРµ РїРµСЃРЅРё
+	const char* songText;//РўРµРєСЃС‚
+	const char* filePath;//РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ
 };
 
 HINSTANCE g_hInstance;
-SongData g_currentSong; //структура с данными текущей выбранной песни
-HWND g_hCurrentSongDialog = NULL;   //Рукоятка окна с текстом песни
+SongData g_currentSong; //СЃС‚СЂСѓРєС‚СѓСЂР° СЃ РґР°РЅРЅС‹РјРё С‚РµРєСѓС‰РµР№ РІС‹Р±СЂР°РЅРЅРѕР№ РїРµСЃРЅРё
+HWND g_hCurrentSongDialog = NULL;   //Р СѓРєРѕСЏС‚РєР° РѕРєРЅР° СЃ С‚РµРєСЃС‚РѕРј РїРµСЃРЅРё
 
-//Прототипы функций
+//РџСЂРѕС‚РѕС‚РёРїС‹ С„СѓРЅРєС†РёР№
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 const char* GetSongText(const char* songName);
 const char* GetSongFilePath(const char* songName);
@@ -47,10 +47,10 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_INITDIALOG:
 	{
-        HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));  //Подключил иконку для первого окна
+        HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));  //РџРѕРґРєР»СЋС‡РёР» РёРєРѕРЅРєСѓ РґР»СЏ РїРµСЂРІРѕРіРѕ РѕРєРЅР°
         SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
 		HWND hList = GetDlgItem(hwnd, IDC_LISTBOX_MUSIC);
-		for (int i = 0; i < sizeof(g_sz_VALUES) / sizeof(g_sz_VALUES[0]); i++)  //Вычисляем количество элементов массива и проходимся по нему
+		for (int i = 0; i < sizeof(g_sz_VALUES) / sizeof(g_sz_VALUES[0]); i++)  //Р’С‹С‡РёСЃР»СЏРµРј РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР° Рё РїСЂРѕС…РѕРґРёРјСЃСЏ РїРѕ РЅРµРјСѓ
 		{
 			SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)g_sz_VALUES[i]);
 		}
@@ -62,7 +62,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 		case IDOK:
 		{
-            HICON hIcon2 = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON2)); //Прикрепил иконку для второй приложухи
+            HICON hIcon2 = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON2)); //РџСЂРёРєСЂРµРїРёР» РёРєРѕРЅРєСѓ РґР»СЏ РІС‚РѕСЂРѕР№ РїСЂРёР»РѕР¶СѓС…Рё
             SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon2);
 			HWND hList = GetDlgItem(hwnd, IDC_LISTBOX_MUSIC);
 			int index = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
@@ -71,42 +71,42 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				char selectedText[256];
 				SendMessage(hList, LB_GETTEXT, index, (LPARAM)selectedText);
 
-                //Заполнили структуру данными новой песни
+                //Р—Р°РїРѕР»РЅРёР»Рё СЃС‚СЂСѓРєС‚СѓСЂСѓ РґР°РЅРЅС‹РјРё РЅРѕРІРѕР№ РїРµСЃРЅРё
 				g_currentSong.songName = selectedText; 
 				g_currentSong.songText = GetSongText(selectedText);
 				g_currentSong.filePath = GetSongFilePath(selectedText);
 
-				CreateSongWindow(hwnd);//Создали окно с текстом песни
+				CreateSongWindow(hwnd);//РЎРѕР·РґР°Р»Рё РѕРєРЅРѕ СЃ С‚РµРєСЃС‚РѕРј РїРµСЃРЅРё
 			}
 			else
 			{
-				MessageBox(hwnd, "Вы ничего не выбрали", "Info", MB_OK | MB_ICONINFORMATION);
+				MessageBox(hwnd, "Р’С‹ РЅРёС‡РµРіРѕ РЅРµ РІС‹Р±СЂР°Р»Рё", "Info", MB_OK | MB_ICONINFORMATION);
 			}
 		}
 		break;
         case IDC_PLAY_BUTTON:
             if (g_currentSong.filePath != NULL)
             {
-                //Если путь к файлу существует - взвали функцию воспроизведения
+                //Р•СЃР»Рё РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ СЃСѓС‰РµСЃС‚РІСѓРµС‚ - РІР·РІР°Р»Рё С„СѓРЅРєС†РёСЋ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ
                 PlayMusicFile(g_currentSong.filePath);
-                MessageBox(hwnd, "Воспроизведение начато", "Info", MB_OK | MB_ICONINFORMATION);
+                MessageBox(hwnd, "Р’РѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµ РЅР°С‡Р°С‚Рѕ", "Info", MB_OK | MB_ICONINFORMATION);
             }
             else
             {
-                MessageBox(hwnd, "Файл не найден", "Ошибка", MB_OK | MB_ICONERROR);
+                MessageBox(hwnd, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
             }
             break;
 		case IDC_STOP_BUTTON:
-			StopMusic();//Остановка воспроизведения
-			MessageBox(hwnd, "Воспроизведение остановлено", "Info", MB_OK | MB_ICONINFORMATION);
+			StopMusic();//РћСЃС‚Р°РЅРѕРІРєР° РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ
+			MessageBox(hwnd, "Р’РѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµ РѕСЃС‚Р°РЅРѕРІР»РµРЅРѕ", "Info", MB_OK | MB_ICONINFORMATION);
 			break;
 
 		case IDC_BACK_BUTTON:
 			if (g_hCurrentSongDialog)
 			{
 				StopMusic();
-				DestroyWindow(g_hCurrentSongDialog);//Уничтожаем окно
-				g_hCurrentSongDialog = NULL;    //Сбрасываем рукоятку
+				DestroyWindow(g_hCurrentSongDialog);//РЈРЅРёС‡С‚РѕР¶Р°РµРј РѕРєРЅРѕ
+				g_hCurrentSongDialog = NULL;    //РЎР±СЂР°СЃС‹РІР°РµРј СЂСѓРєРѕСЏС‚РєСѓ
 			}
 			break;
 
@@ -114,7 +114,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			StopMusic();
 			if (g_hCurrentSongDialog)
 				DestroyWindow(g_hCurrentSongDialog);
-			EndDialog(hwnd, 0);//Выход из приложения
+			EndDialog(hwnd, 0);//Р’С‹С…РѕРґ РёР· РїСЂРёР»РѕР¶РµРЅРёСЏ
 			break;
 		}
 	}
@@ -133,44 +133,44 @@ void CreateSongWindow(HWND hParent)
 {
     if (g_hCurrentSongDialog)
     {
-        DestroyWindow(g_hCurrentSongDialog);    //Если окно существует - уничтожаем его
+        DestroyWindow(g_hCurrentSongDialog);    //Р•СЃР»Рё РѕРєРЅРѕ СЃСѓС‰РµСЃС‚РІСѓРµС‚ - СѓРЅРёС‡С‚РѕР¶Р°РµРј РµРіРѕ
     }
 
-    // Получаю дополнительную информацию об окне и рукоятку приложения
+    // РџРѕР»СѓС‡Р°СЋ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РѕРєРЅРµ Рё СЂСѓРєРѕСЏС‚РєСѓ РїСЂРёР»РѕР¶РµРЅРёСЏ
     HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hParent, GWLP_HINSTANCE);
 
-    // Создаю немодальное диалоговое окно, без блокировки родительского окна
+    // РЎРѕР·РґР°СЋ РЅРµРјРѕРґР°Р»СЊРЅРѕРµ РґРёР°Р»РѕРіРѕРІРѕРµ РѕРєРЅРѕ, Р±РµР· Р±Р»РѕРєРёСЂРѕРІРєРё СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РѕРєРЅР°
     g_hCurrentSongDialog = CreateDialogParam(hInstance, MAKEINTRESOURCE(IDD_SONG_DIALOG),
         hParent, (DLGPROC)DlgProc, 0);
 
     if (g_hCurrentSongDialog)
     {
-        // Устанавливаю заголовок окна
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°СЋ Р·Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°
         SetWindowText(g_hCurrentSongDialog, g_currentSong.songName);
 
-        // Устанавливаю текст песни в Edit Control
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°СЋ С‚РµРєСЃС‚ РїРµСЃРЅРё РІ Edit Control
         HWND hEdit = GetDlgItem(g_hCurrentSongDialog, IDC_SONG_TEXT);
         SetWindowText(hEdit, g_currentSong.songText);
 
-        // Проверяю доступность воспроизведения
+        // РџСЂРѕРІРµСЂСЏСЋ РґРѕСЃС‚СѓРїРЅРѕСЃС‚СЊ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ
         HWND hPlayBtn = GetDlgItem(g_hCurrentSongDialog, IDC_PLAY_BUTTON);
         if (g_currentSong.filePath == NULL)
         {
             EnableWindow(hPlayBtn, FALSE);
-            SetWindowText(hPlayBtn, "Файл не найден");
+            SetWindowText(hPlayBtn, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ");
         }
 
-        // Показываю окно
-        ShowWindow(g_hCurrentSongDialog, SW_SHOW);  //SW_SHOW - нормальное отображение(ShowWindow)
+        // РџРѕРєР°Р·С‹РІР°СЋ РѕРєРЅРѕ
+        ShowWindow(g_hCurrentSongDialog, SW_SHOW);  //SW_SHOW - РЅРѕСЂРјР°Р»СЊРЅРѕРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ(ShowWindow)
     }
 }
 
-// Функция для получения текста песен
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ С‚РµРєСЃС‚Р° РїРµСЃРµРЅ
 const char* GetSongText(const char* songName)
 {
-    if (strcmp(songName, "Decalius - Loneliness") == 0) //Strcmp - Сравнивает строки и возвращает 0, если равны
+    if (strcmp(songName, "Decalius - Loneliness") == 0) //Strcmp - РЎСЂР°РІРЅРёРІР°РµС‚ СЃС‚СЂРѕРєРё Рё РІРѕР·РІСЂР°С‰Р°РµС‚ 0, РµСЃР»Рё СЂР°РІРЅС‹
     {
-        return "Walking through the empty streets\r\n"  //r/n - Символы для переноса строк в WinAPI
+        return "Walking through the empty streets\r\n"  //r/n - РЎРёРјРІРѕР»С‹ РґР»СЏ РїРµСЂРµРЅРѕСЃР° СЃС‚СЂРѕРє РІ WinAPI
                "Shadows dancing in the night\r\n"
                "Loneliness is my only friend\r\n"
                "In this never-ending fight\r\n"
@@ -232,7 +232,7 @@ const char* GetSongText(const char* songName)
                "We are, we are the youth of the nation\r\n"
                 "We are, we are the youth of the nation";
     }
-    else if (strcmp(songName, "Reka — Life Long Tragedy") == 0)
+    else if (strcmp(songName, "Reka вЂ” Life Long Tragedy") == 0)
     {
         return "Another day another struggle\r\n"
             "Fighting battles I can't win\r\n"
@@ -312,7 +312,7 @@ const char* GetSongText(const char* songName)
            "Cold mental, can't be found\r\n"
             "In this emptiness I'm bound";
     }
-    else if (strcmp(songName, "Deer Death — Melt Into You") == 0)
+    else if (strcmp(songName, "Deer Death вЂ” Melt Into You") == 0)
     {
         return "Whispers in the fading light\r\n"
            "Slowly losing all my fight\r\n"
@@ -351,124 +351,124 @@ const char* GetSongText(const char* songName)
            "Melt into you, fade from view\r\n"
             "Until I'm nothing but with you";
     }
-    else if (strcmp(songName, "Никто Не Против - Курю с призраками") == 0)
+    else if (strcmp(songName, "РќРёРєС‚Рѕ РќРµ РџСЂРѕС‚РёРІ - РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё") == 0)
     {
-        return "Сигаретный дым клубится в темноте\r\n"
-           "Призраки прошлого шепчутся во мгле\r\n"
-           "Одинокий вечер, тишина в квартире\r\n"
-           "Вспоминаю тех, кого больше нет в мире\r\n"
-           "Курю с призраками, разговариваю с тенями\r\n"
-           "Ошибки молодости, мы стали чужими\r\n"
-           "Курю с призраками, в дыму растворяюсь\r\n"
-           "С каждым вдохом с прошлым прощаюсь\r\n"
-           "Пепел опадает на старый паркет\r\n"
-           "В памяти оживают былые сюжеты\r\n"
-           "Тени улыбаются, жесты знакомые\r\n"
-           "Разговоры о чём-то важном и простом\r\n"
-           "Курю с призраками, разговариваю с тенями\r\n"
-           "Ошибки молодости, мы стали чужими\r\n"
-           "Курю с призраками, в дыму растворяюсь\r\n"
-           "С каждым вдохом с прошлым прощаюсь\r\n"
-           "Ночь длится бесконечно, время остановилось\r\n"
-           "С каждым призраком стало так легко и горько\r\n"
-           "Обещания, которые мы не сдержали\r\n"
-           "Мечты, что навсегда в прошлом остались\r\n"
-           "Курю с призраками, разговариваю с тенями\r\n"
-           "Ошибки молодости, мы стали чужими\r\n"
-           "Курю с призраками, в дыму растворяюсь\r\n"
-           "С каждым вдохом с прошлым прощаюсь\r\n"
-           "Рассвет приближается, призраки тают\r\n"
-           "Вместе с сигаретным дымом исчезают\r\n"
-           "Но знаю, что завтра снова наступят сумерки\r\n"
-            "И мы продолжим наши тихие беседы";
+        return "РЎРёРіР°СЂРµС‚РЅС‹Р№ РґС‹Рј РєР»СѓР±РёС‚СЃСЏ РІ С‚РµРјРЅРѕС‚Рµ\r\n"
+           "РџСЂРёР·СЂР°РєРё РїСЂРѕС€Р»РѕРіРѕ С€РµРїС‡СѓС‚СЃСЏ РІРѕ РјРіР»Рµ\r\n"
+           "РћРґРёРЅРѕРєРёР№ РІРµС‡РµСЂ, С‚РёС€РёРЅР° РІ РєРІР°СЂС‚РёСЂРµ\r\n"
+           "Р’СЃРїРѕРјРёРЅР°СЋ С‚РµС…, РєРѕРіРѕ Р±РѕР»СЊС€Рµ РЅРµС‚ РІ РјРёСЂРµ\r\n"
+           "РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё, СЂР°Р·РіРѕРІР°СЂРёРІР°СЋ СЃ С‚РµРЅСЏРјРё\r\n"
+           "РћС€РёР±РєРё РјРѕР»РѕРґРѕСЃС‚Рё, РјС‹ СЃС‚Р°Р»Рё С‡СѓР¶РёРјРё\r\n"
+           "РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё, РІ РґС‹РјСѓ СЂР°СЃС‚РІРѕСЂСЏСЋСЃСЊ\r\n"
+           "РЎ РєР°Р¶РґС‹Рј РІРґРѕС…РѕРј СЃ РїСЂРѕС€Р»С‹Рј РїСЂРѕС‰Р°СЋСЃСЊ\r\n"
+           "РџРµРїРµР» РѕРїР°РґР°РµС‚ РЅР° СЃС‚Р°СЂС‹Р№ РїР°СЂРєРµС‚\r\n"
+           "Р’ РїР°РјСЏС‚Рё РѕР¶РёРІР°СЋС‚ Р±С‹Р»С‹Рµ СЃСЋР¶РµС‚С‹\r\n"
+           "РўРµРЅРё СѓР»С‹Р±Р°СЋС‚СЃСЏ, Р¶РµСЃС‚С‹ Р·РЅР°РєРѕРјС‹Рµ\r\n"
+           "Р Р°Р·РіРѕРІРѕСЂС‹ Рѕ С‡С‘Рј-С‚Рѕ РІР°Р¶РЅРѕРј Рё РїСЂРѕСЃС‚РѕРј\r\n"
+           "РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё, СЂР°Р·РіРѕРІР°СЂРёРІР°СЋ СЃ С‚РµРЅСЏРјРё\r\n"
+           "РћС€РёР±РєРё РјРѕР»РѕРґРѕСЃС‚Рё, РјС‹ СЃС‚Р°Р»Рё С‡СѓР¶РёРјРё\r\n"
+           "РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё, РІ РґС‹РјСѓ СЂР°СЃС‚РІРѕСЂСЏСЋСЃСЊ\r\n"
+           "РЎ РєР°Р¶РґС‹Рј РІРґРѕС…РѕРј СЃ РїСЂРѕС€Р»С‹Рј РїСЂРѕС‰Р°СЋСЃСЊ\r\n"
+           "РќРѕС‡СЊ РґР»РёС‚СЃСЏ Р±РµСЃРєРѕРЅРµС‡РЅРѕ, РІСЂРµРјСЏ РѕСЃС‚Р°РЅРѕРІРёР»РѕСЃСЊ\r\n"
+           "РЎ РєР°Р¶РґС‹Рј РїСЂРёР·СЂР°РєРѕРј СЃС‚Р°Р»Рѕ С‚Р°Рє Р»РµРіРєРѕ Рё РіРѕСЂСЊРєРѕ\r\n"
+           "РћР±РµС‰Р°РЅРёСЏ, РєРѕС‚РѕСЂС‹Рµ РјС‹ РЅРµ СЃРґРµСЂР¶Р°Р»Рё\r\n"
+           "РњРµС‡С‚С‹, С‡С‚Рѕ РЅР°РІСЃРµРіРґР° РІ РїСЂРѕС€Р»РѕРј РѕСЃС‚Р°Р»РёСЃСЊ\r\n"
+           "РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё, СЂР°Р·РіРѕРІР°СЂРёРІР°СЋ СЃ С‚РµРЅСЏРјРё\r\n"
+           "РћС€РёР±РєРё РјРѕР»РѕРґРѕСЃС‚Рё, РјС‹ СЃС‚Р°Р»Рё С‡СѓР¶РёРјРё\r\n"
+           "РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё, РІ РґС‹РјСѓ СЂР°СЃС‚РІРѕСЂСЏСЋСЃСЊ\r\n"
+           "РЎ РєР°Р¶РґС‹Рј РІРґРѕС…РѕРј СЃ РїСЂРѕС€Р»С‹Рј РїСЂРѕС‰Р°СЋСЃСЊ\r\n"
+           "Р Р°СЃСЃРІРµС‚ РїСЂРёР±Р»РёР¶Р°РµС‚СЃСЏ, РїСЂРёР·СЂР°РєРё С‚Р°СЋС‚\r\n"
+           "Р’РјРµСЃС‚Рµ СЃ СЃРёРіР°СЂРµС‚РЅС‹Рј РґС‹РјРѕРј РёСЃС‡РµР·Р°СЋС‚\r\n"
+           "РќРѕ Р·РЅР°СЋ, С‡С‚Рѕ Р·Р°РІС‚СЂР° СЃРЅРѕРІР° РЅР°СЃС‚СѓРїСЏС‚ СЃСѓРјРµСЂРєРё\r\n"
+            "Р РјС‹ РїСЂРѕРґРѕР»Р¶РёРј РЅР°С€Рё С‚РёС…РёРµ Р±РµСЃРµРґС‹";
     }
 
-    return "Текст песни недоступен";
+    return "РўРµРєСЃС‚ РїРµСЃРЅРё РЅРµРґРѕСЃС‚СѓРїРµРЅ";
 }
 
-// Функция для получения пути к файлу
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РїСѓС‚Рё Рє С„Р°Р№Р»Сѓ
 const char* GetSongFilePath(const char* songName)
 {
     if (strcmp(songName, "Decalius - Loneliness") == 0)
     {
-        const char* path = "E:\\Музыка\\Decalius - Loneliness.mp3";
-        DWORD attr = GetFileAttributes(path);//GetFileAttributes - Проверяет существование файла
-        if (attr == INVALID_FILE_ATTRIBUTES)    //Если файла не существует, возвращает - Invalid_file_attributes 
+        const char* path = "E:\\РњСѓР·С‹РєР°\\Decalius - Loneliness.mp3";
+        DWORD attr = GetFileAttributes(path);//GetFileAttributes - РџСЂРѕРІРµСЂСЏРµС‚ СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ С„Р°Р№Р»Р°
+        if (attr == INVALID_FILE_ATTRIBUTES)    //Р•СЃР»Рё С„Р°Р№Р»Р° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, РІРѕР·РІСЂР°С‰Р°РµС‚ - Invalid_file_attributes 
         {
-            MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ!", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
             return NULL;
         }
         return path;
     }
-    else if (strcmp(songName, "P.O.D. - Youth of the Nation") == 0) // Исправлено название
+    else if (strcmp(songName, "P.O.D. - Youth of the Nation") == 0) // РСЃРїСЂР°РІР»РµРЅРѕ РЅР°Р·РІР°РЅРёРµ
     {
-        const char* path = "E:\\Музыка\\POD Youth_Of_The_Nation.mp3";
+        const char* path = "E:\\РњСѓР·С‹РєР°\\POD Youth_Of_The_Nation.mp3";
         DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
-            MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ!", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
             return NULL;
         }
         return path;
     }
-    else if (strcmp(songName, "Reka — Life Long Tragedy") == 0) // Исправлено название
+    else if (strcmp(songName, "Reka вЂ” Life Long Tragedy") == 0) // РСЃРїСЂР°РІР»РµРЅРѕ РЅР°Р·РІР°РЅРёРµ
     {
-        const char* path = "E:\\Музыка\\Reka — Life Long Tragedy.mp3";
+        const char* path = "E:\\РњСѓР·С‹РєР°\\Reka вЂ” Life Long Tragedy.mp3";
         DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
-            MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ!", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
             return NULL;
         }
         return path;
     }
-    else if (strcmp(songName, "takizava cold mental") == 0) // Исправлено название
+    else if (strcmp(songName, "takizava cold mental") == 0) // РСЃРїСЂР°РІР»РµРЅРѕ РЅР°Р·РІР°РЅРёРµ
     {
-        const char* path = "E:\\Музыка\\takizava cold mental.mp3";
+        const char* path = "E:\\РњСѓР·С‹РєР°\\takizava cold mental.mp3";
         DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
-            MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ!", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
             return NULL;
         }
         return path;
     }
-    else if (strcmp(songName, "Deer Death — Melt Into You") == 0) // Исправлено название
+    else if (strcmp(songName, "Deer Death вЂ” Melt Into You") == 0) // РСЃРїСЂР°РІР»РµРЅРѕ РЅР°Р·РІР°РЅРёРµ
     {
-        const char* path = "E:\\Музыка\\Deer Death — Melt Into You.mp3";
+        const char* path = "E:\\РњСѓР·С‹РєР°\\Deer Death вЂ” Melt Into You.mp3";
         DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
-            MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ!", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
             return NULL;
         }
         return path;
     }
-    else if (strcmp(songName, "Никто Не Против - Курю с призраками") == 0) // Исправлено название
+    else if (strcmp(songName, "РќРёРєС‚Рѕ РќРµ РџСЂРѕС‚РёРІ - РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё") == 0) // РСЃРїСЂР°РІР»РµРЅРѕ РЅР°Р·РІР°РЅРёРµ
     {
-        const char* path = "E:\\Музыка\\Никто Не Против - Курю с призраками.mp3";
+        const char* path = "E:\\РњСѓР·С‹РєР°\\РќРёРєС‚Рѕ РќРµ РџСЂРѕС‚РёРІ - РљСѓСЂСЋ СЃ РїСЂРёР·СЂР°РєР°РјРё.mp3";
         DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
-            MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ!", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
             return NULL;
         }
         return path;
     }
 
-    MessageBox(NULL, "Песня не найдена в базе!", "Ошибка", MB_OK | MB_ICONERROR);
+    MessageBox(NULL, "РџРµСЃРЅСЏ РЅРµ РЅР°Р№РґРµРЅР° РІ Р±Р°Р·Рµ!", "РћС€РёР±РєР°", MB_OK | MB_ICONERROR);
     return NULL;
 }
 
-// Функция воспроизведения музыки
+// Р¤СѓРЅРєС†РёСЏ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ РјСѓР·С‹РєРё
 void PlayMusicFile(const char* filePath)
 {
-    // Определяю расширение файла
-    const char* ext = strrchr(filePath, '.');   //strrchr - ищет последнее вхождение символа '.' (расширение файла)
-    char type[32] = "mp3"; // по умолчанию для mp3
+    // РћРїСЂРµРґРµР»СЏСЋ СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р°
+    const char* ext = strrchr(filePath, '.');   //strrchr - РёС‰РµС‚ РїРѕСЃР»РµРґРЅРµРµ РІС…РѕР¶РґРµРЅРёРµ СЃРёРјРІРѕР»Р° '.' (СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р°)
+    char type[32] = "mp3"; // РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ mp3
     if (ext != NULL)
     {
-        if (_stricmp(ext, ".wav") == 0) //_stricmp - сравнение строк без учета регистра
+        if (_stricmp(ext, ".wav") == 0) //_stricmp - СЃСЂР°РІРЅРµРЅРёРµ СЃС‚СЂРѕРє Р±РµР· СѓС‡РµС‚Р° СЂРµРіРёСЃС‚СЂР°
             strcpy(type, "waveaudio");
         else if (_stricmp(ext, ".mp3") == 0 || _stricmp(ext, ".mpeg") == 0)
             strcpy(type, "mpegvideo");
@@ -476,22 +476,22 @@ void PlayMusicFile(const char* filePath)
             strcpy(type, "avivideo");
     }
     char command[512];
-    wsprintf(command, "open \"%s\" type %s alias mysong", filePath, type);  //wsprintf - форматирует строку (аналог sprintf для Windows)
+    wsprintf(command, "open \"%s\" type %s alias mysong", filePath, type);  //wsprintf - С„РѕСЂРјР°С‚РёСЂСѓРµС‚ СЃС‚СЂРѕРєСѓ (Р°РЅР°Р»РѕРі sprintf РґР»СЏ Windows)
 
-    MCIERROR error = mciSendString(command, NULL, 0, NULL); //mciSendStringA - отправляет команду MCI (Media Control Interface)
+    MCIERROR error = mciSendString(command, NULL, 0, NULL); //mciSendStringA - РѕС‚РїСЂР°РІР»СЏРµС‚ РєРѕРјР°РЅРґСѓ MCI (Media Control Interface)
     //https://learn.microsoft.com/ru-ru/windows/win32/multimedia/mci-reference
     if (error == 0)
     {
         error = mciSendString("play mysong", NULL, 0, NULL);
         if (error == 0)
         {
-            MessageBox(NULL, "Воспроизведение начато!", "Успех", MB_OK | MB_ICONINFORMATION);
+            MessageBox(NULL, "Р’РѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµ РЅР°С‡Р°С‚Рѕ!", "РЈСЃРїРµС…", MB_OK | MB_ICONINFORMATION);
             return;
         }
     }
 }
 
-// Функция остановки музыки
+// Р¤СѓРЅРєС†РёСЏ РѕСЃС‚Р°РЅРѕРІРєРё РјСѓР·С‹РєРё
 void StopMusic()
 {
     PlaySound(NULL, NULL, 0);
