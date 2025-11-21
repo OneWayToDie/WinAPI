@@ -403,7 +403,7 @@ const char* GetSongFilePath(const char* songName)
     else if (strcmp(songName, "P.O.D. - Youth of the Nation") == 0) // Исправлено название
     {
         const char* path = "E:\\Музыка\\POD Youth_Of_The_Nation.mp3";
-        DWORD attr = GetFileAttributesA(path);
+        DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
             MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
@@ -414,7 +414,7 @@ const char* GetSongFilePath(const char* songName)
     else if (strcmp(songName, "Reka — Life Long Tragedy") == 0) // Исправлено название
     {
         const char* path = "E:\\Музыка\\Reka — Life Long Tragedy.mp3";
-        DWORD attr = GetFileAttributesA(path);
+        DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
             MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
@@ -425,7 +425,7 @@ const char* GetSongFilePath(const char* songName)
     else if (strcmp(songName, "takizava cold mental") == 0) // Исправлено название
     {
         const char* path = "E:\\Музыка\\takizava cold mental.mp3";
-        DWORD attr = GetFileAttributesA(path);
+        DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
             MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
@@ -436,7 +436,7 @@ const char* GetSongFilePath(const char* songName)
     else if (strcmp(songName, "Deer Death — Melt Into You") == 0) // Исправлено название
     {
         const char* path = "E:\\Музыка\\Deer Death — Melt Into You.mp3";
-        DWORD attr = GetFileAttributesA(path);
+        DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
             MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
@@ -447,7 +447,7 @@ const char* GetSongFilePath(const char* songName)
     else if (strcmp(songName, "Никто Не Против - Курю с призраками") == 0) // Исправлено название
     {
         const char* path = "E:\\Музыка\\Никто Не Против - Курю с призраками.mp3";
-        DWORD attr = GetFileAttributesA(path);
+        DWORD attr = GetFileAttributes(path);
         if (attr == INVALID_FILE_ATTRIBUTES)
         {
             MessageBox(NULL, "Файл не найден!", "Ошибка", MB_OK | MB_ICONERROR);
@@ -478,11 +478,11 @@ void PlayMusicFile(const char* filePath)
     char command[512];
     wsprintf(command, "open \"%s\" type %s alias mysong", filePath, type);  //wsprintf - форматирует строку (аналог sprintf для Windows)
 
-    MCIERROR error = mciSendStringA(command, NULL, 0, NULL); //mciSendStringA - отправляет команду MCI (Media Control Interface)
+    MCIERROR error = mciSendString(command, NULL, 0, NULL); //mciSendStringA - отправляет команду MCI (Media Control Interface)
     //https://learn.microsoft.com/ru-ru/windows/win32/multimedia/mci-reference
     if (error == 0)
     {
-        error = mciSendStringA("play mysong", NULL, 0, NULL);
+        error = mciSendString("play mysong", NULL, 0, NULL);
         if (error == 0)
         {
             MessageBox(NULL, "Воспроизведение начато!", "Успех", MB_OK | MB_ICONINFORMATION);
