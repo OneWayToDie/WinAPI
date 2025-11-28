@@ -1,0 +1,55 @@
+[Version]
+signature="$CHICAGO$"
+
+[DefaultInstall]
+CopyFiles = Scheme.Cur, Scheme.Txt
+AddReg    = Scheme.Reg
+
+[DestinationDirs]
+Scheme.Cur = 10,"%CUR_DIR%"
+Scheme.Txt = 10,"%CUR_DIR%"
+
+[Scheme.Reg]
+HKCU,"Control Panel\Cursors\Schemes","%SCHEME_NAME%",,"%10%\%CUR_DIR%\%pointer%,%10%\%CUR_DIR%\%help%,%10%\%CUR_DIR%\%work%,%10%\%CUR_DIR%\%busy%,%10%\%CUR_DIR%\%Cross%,%10%\%CUR_DIR%\%Text%,%10%\%CUR_DIR%\%Hand%,%10%\%CUR_DIR%\%Unavailiable%,%10%\%CUR_DIR%\%Vert%,%10%\%CUR_DIR%\%Horz%,%10%\%CUR_DIR%\%Dgn1%,%10%\%CUR_DIR%\%Dgn2%,%10%\%CUR_DIR%\%move%,%10%\%CUR_DIR%\%alternate%,%10%\%CUR_DIR%\%link%,%10%\%CUR_DIR%\%pin%,%10%\%CUR_DIR%\%person%"
+
+[Scheme.Cur]
+Hornet normal.ani
+Hornet help.ani
+Hornet work.ani
+Hornet busy.ani
+Hornet text.ani
+Hornet unavailable.ani
+Hornet vert.ani
+Hornet horz.ani
+Hornet dgn1.ani
+Hornet dgn2.ani
+Hornet move.ani
+Hornet link.ani
+Hornet precision.ani
+Hornet hand.ani
+Hornet alt.ani
+Hornet location.ani
+Hornet person.ani
+
+[Scheme.Txt]
+
+[Strings]
+CUR_DIR       = "Cursors\Hollow Knight - Hornet Cursor"
+SCHEME_NAME   = "Hollow Knight - Hornet Cursor"
+pointer       = "Hornet normal.ani"
+help          = "Hornet help.ani"
+work          = "Hornet work.ani"
+busy          = "Hornet busy.ani"
+text          = "Hornet text.ani"
+unavailiable  = "Hornet unavailable.ani"
+vert          = "Hornet vert.ani"
+horz          = "Hornet horz.ani"
+dgn1          = "Hornet dgn1.ani"
+dgn2          = "Hornet dgn2.ani"
+move          = "Hornet move.ani"
+link          = "Hornet link.ani"
+cross         = "Hornet precision.ani"
+hand          = "Hornet hand.ani"
+alternate     = "Hornet alt.ani"
+pin           = "Hornet location.ani"
+person        = "Hornet person.ani"
