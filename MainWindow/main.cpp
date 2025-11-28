@@ -1,4 +1,4 @@
-#include<Windows.h>
+п»ї#include<Windows.h>
 
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "My First Window";
@@ -10,25 +10,25 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	WNDCLASSEX wClass;
 	ZeroMemory(&wClass, sizeof(wClass));
 
-	//Инициализируем размеры и стиль
+	//РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЂР°Р·РјРµСЂС‹ Рё СЃС‚РёР»СЊ
 	wClass.style = NULL;
 	wClass.cbSize = sizeof(wClass);	//cb_ - Count Bytes
 	wClass.cbClsExtra = 0;
 	wClass.cbWndExtra = 0;
 
-	//Инициализируем внешний вид окон:
+	//РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РІРЅРµС€РЅРёР№ РІРёРґ РѕРєРѕРЅ:
 	wClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 	wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
-	//Инициализация системных переменных:
+	//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРёСЃС‚РµРјРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…:
 	wClass.hInstance = hInstance;
 	wClass.lpszClassName = g_sz_WINDOW_CLASS;
 	wClass.lpszMenuName = NULL;
 	wClass.lpfnWndProc = WndProc;
 
-	if (RegisterClassEx(&wClass))
+	if (RegisterClassEx(&wClass) == NULL)
 	{
 		MessageBox(NULL, "Class registration failed", NULL, MB_OK | MB_ICONERROR);
 		return 0;
@@ -37,14 +37,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	HWND hwnd = CreateWindowEx
 	(
 		NULL,
-		g_sz_WINDOW_CLASS,	//Имя класса окна
-		g_sz_WINDOW_CLASS,	//Заголовок окна
-		WS_OVERLAPPEDWINDOW,//Стиль окна, ситил зависят от класса окна
+		g_sz_WINDOW_CLASS,	//РРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
+		g_sz_WINDOW_CLASS,	//Р—Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°
+		WS_OVERLAPPEDWINDOW,//РЎС‚РёР»СЊ РѕРєРЅР°, СЃРёС‚РёР» Р·Р°РІРёСЃСЏС‚ РѕС‚ РєР»Р°СЃСЃР° РѕРєРЅР°
 		CW_USEDEFAULT, CW_USEDEFAULT, //Position
-		CW_USEDEFAULT, CW_USEDEFAULT, //Размер окна
+		CW_USEDEFAULT, CW_USEDEFAULT, //Р Р°Р·РјРµСЂ РѕРєРЅР°
 		NULL,
-		NULL, //Для главного окна - это ResourceID главного меню, 
-		//для дочернего окна(Control) - ResourceID дочернего окна(IDC_BUTTON_COPY)
+		NULL, //Р”Р»СЏ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° - СЌС‚Рѕ ResourceID РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ, 
+		//РґР»СЏ РґРѕС‡РµСЂРЅРµРіРѕ РѕРєРЅР°(Control) - ResourceID РґРѕС‡РµСЂРЅРµРіРѕ РѕРєРЅР°(IDC_BUTTON_COPY)
 		hInstance,
 		NULL
 	);
