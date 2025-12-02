@@ -49,7 +49,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 	int displayWidth = GetSystemMetrics(SM_CXSCREEN);	//SM_CXSCREEN — возвращает ширину основного монитора в пикселях
 	int displayHeight = GetSystemMetrics(SM_CYSCREEN);	//SM_CYSCREEN — возвращает высоту основного монитора в пикселях
-
+	//https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics
 	int windowWidth = displayWidth * 3 / 4;
 	int windowHeight = displayHeight * 3 / 4;
 
@@ -97,14 +97,14 @@ void WindowTitle(HWND hwnd)
 	//Функция GetWindowRect заполняет структуру rect значениями
 
 	int x = rect.left;	//Извлекаем X - координату левого верхнего угла окна
-	int y = rect.top;	//Извлекаем Y-координату левого верхнего угла окна
+	int y = rect.top;	//Извлекаем Y - координату левого верхнего угла окна
 	int width = rect.right - rect.left;	//Вычисляем ширину окна
 	int height = rect.bottom - rect.top;//Вычисляем высоту окна
 
 	CHAR title[512];	//Создаём буфер для строки заголовка
 	CHAR temp[64];		//Создаём буфер для конкретных чисел
 
-	lstrcpy(title, "Window: Position("); //Начинаем формировать заголовок
+	lstrcpy(title, "My First Window: Position("); //Начинаем формировать заголовок
 	//https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lstrcpya
 	wsprintf(temp, "%d", x);			//Преобразуем координату X в строку и сохраняем в temp
 	lstrcat(title, temp);				//Добавляем координату X к заголовку
