@@ -1,8 +1,10 @@
 ﻿#include<Windows.h>
+#include"resource.h"
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "Calc PV_521";
-
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -77,7 +79,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lParam)
 			10, 10,
 			250, 22,
 			hwnd,
-			(HMENU)999,
+			(HMENU)IDC_DISPLAY,
 			GetModuleHandle(NULL),
 			NULL
 		);

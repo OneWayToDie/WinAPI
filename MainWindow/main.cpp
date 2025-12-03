@@ -122,6 +122,21 @@ void WindowTitle(HWND hwnd)
 	lstrcat(title, temp);				//Добавляем высоту к заголовку
 	lstrcat(title, ")");				//Закрываем заголовок
 
+	//===================================================================================//
+
+	lstrcat(title, " | ");
+
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	wsprintf(temp, "Screen: %dx%d", screenWidth, screenHeight);
+	lstrcat(title, temp);
+
+	int percentX = (width * 100) / screenWidth;
+	int percentY = (height * 100) / screenHeight;
+	wsprintf(temp, " (%d%%x%d%%)", percentX, percentY);
+	lstrcat(title, temp);
+
+
 	SetWindowText(hwnd, title);			//Устанавливаем новый заголовок для окна
 }
 
