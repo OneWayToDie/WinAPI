@@ -4,7 +4,7 @@
 #include<sstream>
 #include"resource.h"
 
-CONST CHAR g_sz_WINDOW_CLASS[] = "Calc PV_521";
+CONST CHAR g_sz_WINDOW_CLASS[] = "KLMSLF";
 
 CONST INT g_i_BUTTON_SIZE = 50;
 CONST INT g_i_INTERVAL = 5;
@@ -58,8 +58,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.cbClsExtra = 0;
 	wClass.cbWndExtra = 0;
 
-	wClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+	/*wClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);*/
+	wClass.hIcon = (HICON)LoadImage(NULL, "calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	wClass.hIconSm = (HICON)LoadImage(NULL, "calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	/*wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);*/
 	wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
@@ -247,6 +249,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_COMMAND:
 	{
+		SetFocus(hwnd);
 		int id = LOWORD(wParam);
 		if (id == IDC_DISPLAY)
 			break;
