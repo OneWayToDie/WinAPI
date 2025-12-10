@@ -437,6 +437,4 @@ VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 		LR_LOADFROMFILE
 	);
 	SendMessage(hButton, BM_SETIMAGE, 0, (LPARAM)bmpButton);*/
-
-	}
 }
