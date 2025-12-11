@@ -93,6 +93,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		AllocConsole();
 		freopen("CONOUT$", "w", stdout);
+
+		HWND hBackground = CreateWindowEx
+		(
+			0,
+			"Static",
+			NULL,
+			WS_CHILD | WS_VISIBLE | SS_BITMAP,
+			0, 0, 0, 0,
+			hwnd,
+			NULL,
+			GetModuleHandle(NULL),
+			NULL
+		);
+		HBITMAP hBmp = (HBITMAP)LoadImage
+		(
+			NULL,
+			"Nado.bmp",
+			IMAGE_BITMAP,
+			0, 0,
+			LR_LOADFROMFILE
+		);
+		SendMessage(hBackground, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBmp);
+
+
 		CreateWindowEx
 		(
 			NULL,
@@ -138,15 +162,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-		HBITMAP hbmpZero = (HBITMAP)LoadImage
-		(
-			GetModuleHandle(NULL), 
-			"Zero.bmp", 
-			IMAGE_BITMAP, 
-			g_i_BUTTON_DOUBLE_SIZE, g_i_BUTTON_SIZE,
-			LR_LOADFROMFILE
-		);
-		SendMessage(hButtonZero, BM_SETIMAGE, 0, (LPARAM)hbmpZero);
 		CreateWindowEx
 		(
 			NULL, "Button", ".",
@@ -208,6 +223,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL
 		);
 		SetSkin(hwnd, "square_blue");
+	}
+	break;
+	case WM_SIZE:
+	{
+		// Растягиваем фон на все окно
+		HWND hBackground = GetWindow(hwnd, GW_CHILD); // Первый дочерний элемент - наш фон
+		if (hBackground)
+		{
+			RECT rc;
+			GetClientRect(hwnd, &rc);
+			SetWindowPos(hBackground, NULL, 0, 0,
+				rc.right, rc.bottom,
+				SWP_NOZORDER);
+		}
 	}
 	break;
 	case WM_COMMAND:
