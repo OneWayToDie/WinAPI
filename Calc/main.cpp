@@ -439,13 +439,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_PAINT:
 	{
-		PAINTSTRUCT ps;//PaintStruct содеержит информацию о том, какую область нужно перерисовывать
+		PAINTSTRUCT ps;//PaintStruct содержит информацию о том, какую область нужно перерисовывать
 		HDC hdc = BeginPaint(hwnd, &ps);	//BeginPaint - подготавливает окно к рисованию и возвращает HDC
 
 		if (g_hBackground && strcmp(g_szCurrentBackground, "none") != 0)	//Проверяю два условия - существует загруженное изображение и текущий фон не none
 		{
 			HDC hdcMem = CreateCompatibleDC(hdc);	//Создаю совместимый контекст устройства в памяти
-			HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMem, g_hBackground);	//Вставляю изображение в контекст памяти, возвращаю старое изображение и сохраняю его, чтобы потом восстановить
+			HBITMAP Bitmap = (HBITMAP)SelectObject(hdcMem, g_hBackground);	//Вставляю изображение в контекст памяти, возвращаю старое изображение и сохраняю его, чтобы потом восстановить
 
 			BITMAP bm;	
 			GetObject(g_hBackground, sizeof(BITMAP), &bm);	//Получаю информацию о bitmap, заполняю структуру данными
@@ -454,7 +454,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetClientRect(hwnd, &rcClient);	//Получаю размеры области окна
 			StretchBlt(hdc, 0, 0, rcClient.right, rcClient.bottom,	//Рисование с растяжением
 				hdcMem, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
-			SelectObject(hdcMem, hOldBitmap);	//Восстанавливаю старое изображение в контекст памяти, чтоб не было утечки ресурсов
+			SelectObject(hdcMem, Bitmap);	//Восстанавливаю старое изображение в контекст памяти, чтоб не было утечки ресурсов
 			DeleteDC(hdcMem);	//Очищаю всё за собой
 		}
 		else	//Если нет фона - рисую стандартный фон windows
