@@ -450,9 +450,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			BITMAP bm;	
 			GetObject(g_hBackground, sizeof(BITMAP), &bm);	//Получаю информацию о bitmap, заполняю структуру данными
 
-			RECT rcClient;	
-			GetClientRect(hwnd, &rcClient);	//Получаю размеры области окна
-			StretchBlt(hdc, 0, 0, rcClient.right, rcClient.bottom,	//Рисование с растяжением
+			RECT rectClient;	
+			GetClientRect(hwnd, &rectClient);	//Получаю размеры области окна
+			StretchBlt(hdc, 0, 0, rectClient.right, rectClient.bottom,	//Рисование с растяжением
 				hdcMem, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
 			SelectObject(hdcMem, Bitmap);	//Восстанавливаю старое изображение в контекст памяти, чтоб не было утечки ресурсов
 			DeleteDC(hdcMem);	//Очищаю всё за собой
