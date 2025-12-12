@@ -23,8 +23,12 @@ CONST INT g_i_WINDOW_HEIGHT = g_i_DISPLAY_HEIGHT + g_i_START_Y + (g_i_BUTTON_SIZ
 
 CONST CHAR g_OPERATIONS[] = "+-*/";
 
+static HBITMAP g_hBackground = NULL;
+static CHAR g_szCurrentBackground[64] = "Pole";
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID SetSkin(HWND hwnd, CONST CHAR skin[]);
+VOID SetBackground(HWND hwnd, CONST CHAR background[]);
 
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
@@ -94,28 +98,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		AllocConsole();
 		freopen("CONOUT$", "w", stdout);
 
-		HWND hBackground = CreateWindowEx
-		(
-			0,
-			"Static",
-			NULL,
-			WS_CHILD | WS_VISIBLE | SS_BITMAP,
-			0, 0, 0, 0,
-			hwnd,
-			NULL,
-			GetModuleHandle(NULL),
-			NULL
-		);
-		HBITMAP hBmp = (HBITMAP)LoadImage
-		(
-			NULL,
-			"Nado.bmp",
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE
-		);
-		SendMessage(hBackground, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBmp);
-
+		SetBackground(hwnd, "Pole");
 
 		CreateWindowEx
 		(
@@ -141,8 +124,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					NULL, "Button", sz_button,
 					WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 					X_BUTTON_POSITION(j), Y_BUTTON_POSITION(2 - i / 3),
-					/*g_i_BUTTON_START_X + (g_i_BUTTON_SIZE + g_i_INTERVAL) * j,
-					g_i_BUTTON_START_Y + (g_i_BUTTON_SIZE + g_i_INTERVAL) * (2 - i/3),*/
 					g_i_BUTTON_SIZE, g_i_BUTTON_SIZE,
 					hwnd,
 					HMENU(IDC_BUTTON_1 + i + j),
@@ -223,20 +204,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL
 		);
 		SetSkin(hwnd, "square_blue");
-	}
-	break;
-	case WM_SIZE:
-	{
-		// Растягиваем фон на все окно
-		HWND hBackground = GetWindow(hwnd, GW_CHILD); // Первый дочерний элемент - наш фон
-		if (hBackground)
-		{
-			RECT rc;
-			GetClientRect(hwnd, &rc);
-			SetWindowPos(hBackground, NULL, 0, 0,
-				rc.right, rc.bottom,
-				SWP_NOZORDER);
-		}
 	}
 	break;
 	case WM_COMMAND:
@@ -428,6 +395,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		AppendMenu(cmMain, MF_STRING, IDM_SQUARE_BLUE, "Square blue");
 		AppendMenu(cmMain, MF_STRING, IDM_METAL_MISTRAL, "Metal mistral");
 		AppendMenu(cmMain, MF_SEPARATOR, NULL, NULL);
+
+		HMENU hBackgroundMenu = CreatePopupMenu();
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_BACKGROUND_NONE, "EmPtY");
+		AppendMenu(cmMain, MF_SEPARATOR, NULL, NULL);
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_TOKYO, "Tokyo");
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_TOKYO_2, "Tokyo 2");
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_DOMA_I_NEBO, "Doma");
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_KOTIKI, "Kotiki");
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_NOCHNOY_GOROD, "Nochnoy gorod");
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_POLE, "Pole");
+		AppendMenu(hBackgroundMenu, MF_STRING, IDM_UTRENNII_TRAMVAI, "Utro");
+
+		AppendMenu(cmMain, MF_POPUP, (UINT_PTR)hBackgroundMenu, "Выбор фона");
+		AppendMenu(cmMain, MF_SEPARATOR, NULL, NULL);
 		AppendMenu(cmMain, MF_STRING, IDM_EXIT, "Exit");
 
 		BOOL selected_item = TrackPopupMenuEx
@@ -441,17 +422,56 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		);
 		switch (selected_item)
 		{
-		case IDM_SQUARE_BLUE:	SetSkin(hwnd, "square_blue"); break;
-		case IDM_METAL_MISTRAL:	SetSkin(hwnd, "metal_mistral"); break;
-		case IDM_EXIT:	SendMessage(hwnd, WM_CLOSE, 0, 0); break;
+		case IDM_SQUARE_BLUE:		SetSkin(hwnd, "square_blue");			break;
+		case IDM_METAL_MISTRAL:		SetSkin(hwnd, "metal_mistral");			break;
+		case IDM_BACKGROUND_NONE:	SetBackground(hwnd, "none");			break;
+		case IDM_TOKYO:				SetBackground(hwnd, "Tokyo");			break;
+		case IDM_TOKYO_2:			SetBackground(hwnd, "Tokyo_2");			break;
+		case IDM_DOMA_I_NEBO:		SetBackground(hwnd, "doma_i_nebo");		break;
+		case IDM_KOTIKI:			SetBackground(hwnd, "Kotiki");			break;
+		case IDM_NOCHNOY_GOROD:		SetBackground(hwnd, "Nochnoy_gorod");	break;
+		case IDM_POLE:				SetBackground(hwnd, "Pole");			break;
+		case IDM_UTRENNII_TRAMVAI:	SetBackground(hwnd, "Utrennii_tramvai");break;
+		case IDM_EXIT:				SendMessage(hwnd, WM_CLOSE, 0, 0);		break;
 		}
 		DestroyMenu(cmMain);
 	}
 	break;
+	case WM_PAINT:
+	{
+		PAINTSTRUCT ps;//PaintStruct содеержит информацию о том, какую область нужно перерисовывать
+		HDC hdc = BeginPaint(hwnd, &ps);	//BeginPaint - подготавливает окно к рисованию и возвращает HDC
+
+		if (g_hBackground && strcmp(g_szCurrentBackground, "none") != 0)	//Проверяю два условия - существует загруженное изображение и текущий фон не none
+		{
+			HDC hdcMem = CreateCompatibleDC(hdc);	//Создаю совместимый контекст устройства в памяти
+			HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMem, g_hBackground);	//Вставляю изображение в контекст памяти, возвращаю старое изображение и сохраняю его, чтобы потом восстановить
+
+			BITMAP bm;	
+			GetObject(g_hBackground, sizeof(BITMAP), &bm);	//Получаю информацию о bitmap, заполняю структуру данными
+
+			RECT rcClient;	
+			GetClientRect(hwnd, &rcClient);	//Получаю размеры области окна
+			StretchBlt(hdc, 0, 0, rcClient.right, rcClient.bottom,	//Рисование с растяжением
+				hdcMem, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
+			SelectObject(hdcMem, hOldBitmap);	//Восстанавливаю старое изображение в контекст памяти, чтоб не было утечки ресурсов
+			DeleteDC(hdcMem);	//Очищаю всё за собой
+		}
+		else	//Если нет фона - рисую стандартный фон windows
+		{
+			HBRUSH hBrush = (HBRUSH)(COLOR_WINDOW + 1);
+			FillRect(hdc, &ps.rcPaint, hBrush);	//Заливаю область стандартной кистью
+		}
+		EndPaint(hwnd, &ps);	//Завершаю процесс рисования
+		return 0; 
+	}
+	break;
 	case WM_DESTROY:
+	{
 		FreeConsole();
 		PostQuitMessage(0);
-		break;
+	}
+	break;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);
 		break;
@@ -480,4 +500,32 @@ VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 		);
 		SendMessage(hButton, BM_SETIMAGE, 0, (LPARAM)bmpButton);
 	}
+}
+VOID SetBackground(HWND hwnd, CONST CHAR background[])
+{
+	if (g_hBackground) // Проверяю на существование предыдущего фонового изображения,
+		//если оно не NULL - обнуляю
+	{
+		DeleteObject(g_hBackground);	//https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-deleteobject
+		g_hBackground = NULL;
+	}
+	strcpy(g_szCurrentBackground, background);	//Сохраняю имя текущего фона в глобальную переменную
+	if (strcmp(background, "none") == 0)	//Проверка на то, не выбрал ли пользователь опцию - без фона
+	{
+		InvalidateRect(hwnd, NULL, TRUE);	//Если выбран none - сообщаю, что нужно перерисовать окно 
+		//https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-invalidaterect
+		return;
+	}
+	CHAR szFilename[MAX_PATH]; // Создаю буфер для хранения полного пути к файлу
+	sprintf(szFilename, "Backgrounds\\%s.bmp", background);	//Задаю путь к файлу
+
+	g_hBackground = (HBITMAP)LoadImage(NULL, szFilename, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);	//Загружаю изображение из файла
+
+	if (!g_hBackground)	//Проверяю, успешно ли загрузилось изображение
+	{
+		MessageBox(hwnd, "Не удалось загрузить изображение", "Ошибка", MB_OK | MB_ICONERROR);
+		return;
+	}
+
+	InvalidateRect(hwnd, NULL, TRUE);//Сообщаю винде о перерисовке окна с новым фоном
 }

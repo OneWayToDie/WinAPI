@@ -5,6 +5,14 @@
 #define IDM_EXIT				200
 #define IDM_SQUARE_BLUE			201
 #define IDM_METAL_MISTRAL		202
+#define IDM_BACKGROUND_NONE		203
+#define IDM_TOKYO				204
+#define IDM_TOKYO_2				205
+#define IDM_DOMA_I_NEBO			206
+#define IDM_KOTIKI				207
+#define IDM_NOCHNOY_GOROD		208
+#define IDM_POLE				209
+#define IDM_UTRENNII_TRAMVAI	210
 
 
 #define IDC_DISPLAY				999
@@ -28,6 +36,7 @@
 #define IDC_BUTTON_BSP			1015
 #define IDC_BUTTON_CLR			1016
 #define IDC_BUTTON_EQUAL		1017
+#define IDC_BACKGROUND          1018
 
 // Next default values for new objects
 // 
