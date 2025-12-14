@@ -1,5 +1,4 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#include<iostream>
 #include"resource.h"
 #include"dimensions.h"
 #include"ColorsAndSkins.h"

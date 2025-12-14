@@ -1,6 +1,6 @@
 #pragma once
 #include<Windows.h>
-
+#include<iostream>
 
 CONST INT g_i_BUTTON_SIZE = 50;
 CONST INT g_i_INTERVAL = 5;
