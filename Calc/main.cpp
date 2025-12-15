@@ -3,7 +3,7 @@
 #include<iostream>
 #include"resource.h"
 
-CONST CHAR g_sz_WINDOW_CLASS[] = "Calc PV_521";
+CONST CHAR g_sz_WINDOW_CLASS[] = "Shingeki";
 
 CONST INT g_i_BUTTON_SIZE = 50;
 CONST INT g_i_INTERVAL = 5;
@@ -15,7 +15,7 @@ CONST INT g_i_START_Y = 10;
 CONST INT g_i_BUTTON_START_X = g_i_START_X;
 CONST INT g_i_BUTTON_START_Y = g_i_START_Y + g_i_DISPLAY_HEIGHT + g_i_INTERVAL * 5;
 
-CONST INT g_i_WINDOW_WIDTH = g_i_DISPLAY_WIDTH + g_i_START_X * 2 + 16;
+CONST INT g_i_WINDOW_WIDTH = g_i_DISPLAY_WIDTH + g_i_START_X * 2 + 160;
 CONST INT g_i_WINDOW_HEIGHT = g_i_DISPLAY_HEIGHT + g_i_START_Y + (g_i_BUTTON_SIZE + g_i_INTERVAL) * 4 + 64;
 
 #define X_BUTTON_POSITION(position) g_i_BUTTON_START_X + (g_i_BUTTON_SIZE + g_i_INTERVAL) * (position)
@@ -26,9 +26,18 @@ CONST CHAR g_OPERATIONS[] = "+-*/";
 static HBITMAP g_hBackground = NULL;
 static CHAR g_szCurrentBackground[64] = "Pole";
 
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+static CHAR g_history[10][256];
+static INT g_historyCount = 0;
+
+
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID SetSkin(HWND hwnd, CONST CHAR skin[]);
 VOID SetBackground(HWND hwnd, CONST CHAR background[]);
+VOID UpdateHistory(HWND hwnd);
 
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
@@ -43,8 +52,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wClass.cbWndExtra = 0;
 
 
-	wClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+	wClass.hIcon = (HICON)LoadImage(NULL, "Calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	wClass.hIconSm = (HICON)LoadImage(NULL, "Calculator.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	wClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
@@ -203,15 +212,40 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+
+		CreateWindowEx(
+			WS_EX_CLIENTEDGE,
+			"EDIT",
+			"История рассчётов:",
+			WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
+			g_i_DISPLAY_WIDTH + g_i_START_X * 2 + 10, 10,
+			180, 262,
+			hwnd,
+			(HMENU)1020,
+			GetModuleHandle(NULL),
+			NULL
+		);
+		SetWindowPos
+		(
+			hwnd,
+			NULL,
+			0,0,
+			g_i_WINDOW_WIDTH + 120,
+			g_i_WINDOW_HEIGHT + 15,
+			SWP_NOMOVE | SWP_NOZORDER 
+		);
+
 		SetSkin(hwnd, "square_blue");
 	}
 	break;
 	case WM_COMMAND:
 	{
-		static DOUBLE a = DBL_MIN, b = DBL_MIN;		//Операнды
+		static DOUBLE a = DBL_MIN, b = DBL_MIN;
 		static INT operation = 0;
-		static BOOL input = FALSE;					//Срабатывает при нажатии цифр
+		static BOOL input = FALSE;
 		static BOOL input_operation = FALSE;
+		static CHAR lastExpression[256] = "";
+		static CHAR lastOperation = 0;  
 
 		SetFocus(hwnd);
 		HWND hEdit = GetDlgItem(hwnd, IDC_DISPLAY);
@@ -219,27 +253,48 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		CHAR sz_buffer[SIZE] = {};
 		CHAR sz_digit[2] = {};
 		SendMessage(hEdit, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
-		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9)
+
+
+		if (LOWORD(wParam) >= IDC_BUTTON_PLUS && LOWORD(wParam) <= IDC_BUTTON_SLASH)
+		{
+			strcpy(lastExpression, sz_buffer); //Сохраняю текущее содержимое дисплея в первый операнд
+
+			switch (LOWORD(wParam))	//Определяю какой операнд нажат
+			{
+			case IDC_BUTTON_PLUS: lastOperation = '+'; break;
+			case IDC_BUTTON_MINUS: lastOperation = '-'; break;
+			case IDC_BUTTON_ASTER: lastOperation = '*'; break;
+			case IDC_BUTTON_SLASH: lastOperation = '/'; break;
+			}
+
+			if (input)	//Проверяю инпут
+			{
+				if (a == DBL_MIN) a = atof(sz_buffer);	//Если переменная а содержит минимальное значение, значит первый операнд ещё не установлен
+				else b = atof(sz_buffer);	//Или установлен
+				input = FALSE;				//СБрасываю
+			}
+			operation = LOWORD(wParam);		//Сохраняю id операции в переменную operation
+			input_operation = TRUE;			//Устанавливаю true
+
+			return 0;
+		}
+
+		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9)	//Без изменений
 		{
 			if (input_operation)
 			{
-				//SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)"");
 				sz_buffer[0] = 0;
 				input_operation = FALSE;
 			}
 			sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + '0';
 			if (strcmp(sz_buffer, "0") == 0)strcpy(sz_buffer, sz_digit);
 			else	strcat(sz_buffer, sz_digit);
-			//strcat - string concatenation(слияние строк)
-			//strcat(dst, src); dst += src
-			// strcpy(dst, src) - String copy
-			//dst - destination(строка получатель)
-			//src - Source (строка источник)
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 			input = TRUE;
 			input_operation = FALSE;
 		}
-		if (LOWORD(wParam) == IDC_BUTTON_POINT)
+
+		if (LOWORD(wParam) == IDC_BUTTON_POINT)	//Без изменений
 		{
 			if (input_operation)
 			{
@@ -252,32 +307,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 			input = TRUE;
 		}
-		if (LOWORD(wParam) == IDC_BUTTON_BSP)
+
+		if (LOWORD(wParam) == IDC_BUTTON_BSP)	//Без изменений
 		{
 			if (!input)break;
 			if (strlen(sz_buffer) == 1)sz_buffer[0] = '0';
 			else	sz_buffer[strlen(sz_buffer) - 1] = 0;
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
+
 		if (LOWORD(wParam) == IDC_BUTTON_CLR)
 		{
 			a = b = DBL_MIN;
 			operation = 0;
 			input = input_operation = FALSE;
+			lastOperation = 0;
+			lastExpression[0] = '\0';
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)"0");
 		}
-		if (LOWORD(wParam) >= IDC_BUTTON_PLUS && LOWORD(wParam) <= IDC_BUTTON_SLASH)
-		{
-			if (input)
-			{
-				if (a == DBL_MIN) a = atof(sz_buffer);	//ANSI/ASCII to double
-				else b = atof(sz_buffer);
-				input = FALSE;
-				SendMessage(hwnd, WM_COMMAND, LOWORD(IDC_BUTTON_EQUAL), 0);
-			}
-			operation = LOWORD(wParam);
-			input_operation = TRUE;
-		}
+
 		if (LOWORD(wParam) == IDC_BUTTON_EQUAL)
 		{
 			if (input)
@@ -286,7 +334,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				else b = atof(sz_buffer);
 				input = FALSE;
 			}
+
+			if (b == DBL_MIN)
+			{
+				b = atof(sz_buffer);
+			}
+
 			if (b == DBL_MIN) break;
+
+
+			DOUBLE secondOperand = b;
+
 			switch (operation)
 			{
 			case IDC_BUTTON_PLUS: a += b;	break;
@@ -294,10 +352,38 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			case IDC_BUTTON_ASTER: a *= b;	break;
 			case IDC_BUTTON_SLASH: a /= b;	break;
 			}
+
 			input_operation = FALSE;
 			sprintf(sz_buffer, "%g", a);
-			//for(int i = strlen(sz_buffer) - 1; sz_buffer[i] == '0' || sz_buffer[i] == '.'; sz_buffer[i--] = 0)
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+
+			if (lastOperation != 0 && strlen(lastExpression) > 0)	//Проверяю была ли сохранена операция(не равна нулю,
+				//и есть ли сохранённое выражение
+			{
+				CHAR historyEntry[256];	//Создал временный буфер, для хранения строки истории
+				sprintf(historyEntry, "%s %c %g = %s",	//Формирую строку истории с шаблоном "%s %c %g = %s"
+					//lastExpression lastOperation secondOperand = sz_buffer
+					lastExpression, lastOperation, secondOperand, sz_buffer);
+
+
+				for (INT i = 9; i > 0; i--)	//Начинаю цикл с девяти и до нуля
+				{
+					strcpy(g_history[i], g_history[i - 1]);	//Копирую запись из предыдущей позиции массива в текущую
+				}
+				strcpy(g_history[0], historyEntry);	//Копирую новую запись истории в самую первую позицию массива
+
+				if (g_historyCount < 10)	//Увеличиваю счётчик записей, но не больше чем на 10
+					g_historyCount++;
+
+
+				UpdateHistory(hwnd);	//Вызываю функцию обновления истории
+
+
+				lastOperation = 0;	//Сбрасываю сохраненную операцию в 0
+				lastExpression[0] = '\0';	//Делаю строку lastExpression пустой
+			}
+
+			b = DBL_MIN; //Сбрасываю второй операнд b в минимальное значение
 		}
 	}
 	break;
@@ -416,7 +502,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			cmMain, 
 			TPM_RIGHTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_VERNEGANIMATION,
 			LOWORD(lParam), HIWORD(lParam),
-			//0,	//Reserved
 			hwnd,
 			NULL
 		);
@@ -434,6 +519,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDM_UTRENNII_TRAMVAI:	SetBackground(hwnd, "Utrennii_tramvai");break;
 		case IDM_EXIT:				SendMessage(hwnd, WM_CLOSE, 0, 0);		break;
 		}
+
 		DestroyMenu(cmMain);
 	}
 	break;
@@ -461,6 +547,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			HBRUSH hBrush = (HBRUSH)(COLOR_WINDOW + 1);
 			FillRect(hdc, &ps.rcPaint, hBrush);	//Заливаю область стандартной кистью
+		}
+
+		INT y = 40; // Начальная позиция
+		for (INT i = 0; i < g_historyCount; i++)
+		{
+			TextOut(hdc, g_i_WINDOW_WIDTH + 15, y, g_history[i], strlen(g_history[i]));
+			y += 20; // Отступ между записями
 		}
 		EndPaint(hwnd, &ps);	//Завершаю процесс рисования
 		return 0; 
@@ -528,4 +621,17 @@ VOID SetBackground(HWND hwnd, CONST CHAR background[])
 	}
 
 	InvalidateRect(hwnd, NULL, TRUE);//Сообщаю винде о перерисовке окна с новым фоном
+}
+
+VOID UpdateHistory(HWND hwnd)
+{
+	HWND hEdit = GetDlgItem(hwnd, 1020);	//Получаю Handle дескриптор Edit-контроля с id 7000
+	CHAR historyText[2048] = "История рассчётов:\r\n";	//Создаю буфер для текста истории
+
+	for (INT i = 0; i < g_historyCount; i++)	//Произвожу цикл по всем записям истории
+	{
+		strcat(historyText, g_history[i]);	//Добавляю текущую запись истории в буфер
+		strcat(historyText, "\r\n");		//Добавляю перевод строки после каждой записи
+	}
+	SetWindowText(hEdit, historyText);	//Устанавливаю текст в Edit-контроль
 }
