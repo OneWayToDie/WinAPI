@@ -5,6 +5,7 @@
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID SetSkin(HWND hwnd, CONST CHAR skin[]);
+VOID SetSkinFromDLL(HWND hwnd, CONST CHAR skin[]);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -204,7 +205,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-		SetSkin(hwnd, "square_blue");
+		SetSkinFromDLL(hwnd, "square_blue");
 	}
 	break;
 	case WM_CTLCOLOREDIT:
@@ -427,7 +428,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDM_EXIT:	SendMessage(hwnd, WM_CLOSE, 0, 0); break;
 		}
 		InvalidateRect(hwnd, 0 ,TRUE);
-		SetSkin(hwnd, g_sz_SKIN[skinID]);
+		SetSkinFromDLL(hwnd, g_sz_SKIN[skinID]);
 		DestroyMenu(cmMain);
 	}
 	break;
@@ -463,4 +464,22 @@ VOID SetSkin(HWND hwnd, CONST CHAR skin[])
 		);
 		SendMessage(hButton, BM_SETIMAGE, 0, (LPARAM)bmpButton);
 	}
+}
+VOID SetSkinFromDLL(HWND hwnd, CONST CHAR skin[])
+{
+	HMODULE hSkin = LoadLibrary(skin);
+	for (INT i = IDC_BUTTON_0; i <= IDC_BUTTON_EQUAL; i++)
+	{
+		HBITMAP hBitmap = (HBITMAP)LoadImage
+		(
+			hSkin,
+			MAKEINTRESOURCE(i),
+			IMAGE_BITMAP,
+			i == IDC_BUTTON_0 ? g_i_BUTTON_DOUBLE_SIZE : g_i_BUTTON_SIZE,
+			i == IDC_BUTTON_EQUAL ? g_i_BUTTON_DOUBLE_SIZE : g_i_BUTTON_SIZE,
+			LR_SHARED		//загрузка из библы
+		);
+		SendMessage(GetDlgItem(hwnd, i), BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap);
+	}
+	FreeLibrary(hSkin);
 }
