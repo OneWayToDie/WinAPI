@@ -625,7 +625,7 @@ VOID SetBackground(HWND hwnd, CONST CHAR background[])
 
 VOID UpdateHistory(HWND hwnd)
 {
-	HWND hEdit = GetDlgItem(hwnd, 1020);	//Получаю Handle дескриптор Edit-контроля с id 7000
+	HWND hEdit = GetDlgItem(hwnd, 1020);	//Получаю Handle дескриптор Edit-контроля с id 1020
 	CHAR historyText[2048] = "История рассчётов:\r\n";	//Создаю буфер для текста истории
 
 	for (INT i = 0; i < g_historyCount; i++)	//Произвожу цикл по всем записям истории
