@@ -480,6 +480,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HMENU cmMain = CreatePopupMenu();
 		AppendMenu(cmMain, MF_STRING, IDM_SQUARE_BLUE, "Square blue");
 		AppendMenu(cmMain, MF_STRING, IDM_METAL_MISTRAL, "Metal mistral");
+		AppendMenu(cmMain, MF_STRING, IDM_TOXIC_YELLOW, "Toxic Yellow");
 		AppendMenu(cmMain, MF_SEPARATOR, NULL, NULL);
 
 		HMENU hBackgroundMenu = CreatePopupMenu();
@@ -509,6 +510,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 		case IDM_SQUARE_BLUE:		SetSkin(hwnd, "square_blue");			break;
 		case IDM_METAL_MISTRAL:		SetSkin(hwnd, "metal_mistral");			break;
+		case IDM_TOXIC_YELLOW:		SetSkin(hwnd, "toxic_yellow");			break;
 		case IDM_BACKGROUND_NONE:	SetBackground(hwnd, "none");			break;
 		case IDM_TOKYO:				SetBackground(hwnd, "Tokyo");			break;
 		case IDM_TOKYO_2:			SetBackground(hwnd, "Tokyo_2");			break;
