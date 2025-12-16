@@ -4,6 +4,7 @@
 #include"resource.h"
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "Shingeki";
+CONST CHAR* g_sz_SKIN[] = { "square_blue", "metal_mistral", "toxic_yellow"};
 
 CONST INT g_i_BUTTON_SIZE = 50;
 CONST INT g_i_INTERVAL = 5;
@@ -508,9 +509,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		);
 		switch (selected_item)
 		{
-		case IDM_SQUARE_BLUE:		SetSkin(hwnd, "square_blue");			break;
-		case IDM_METAL_MISTRAL:		SetSkin(hwnd, "metal_mistral");			break;
-		case IDM_TOXIC_YELLOW:		SetSkin(hwnd, "toxic_yellow");			break;
+		case IDM_SQUARE_BLUE:		skinID = 0;/*SetSkin(hwnd, "square_blue");*/			break;
+		case IDM_METAL_MISTRAL:		skinID = 1;/*SetSkin(hwnd, "metal_mistral");*/			break;
+		case IDM_TOXIC_YELLOW:		skinID = 2;/*SetSkin(hwnd, "toxic_yellow");*/			break;
 		case IDM_BACKGROUND_NONE:	SetBackground(hwnd, "none");			break;
 		case IDM_TOKYO:				SetBackground(hwnd, "Tokyo");			break;
 		case IDM_TOKYO_2:			SetBackground(hwnd, "Tokyo_2");			break;
@@ -521,7 +522,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDM_UTRENNII_TRAMVAI:	SetBackground(hwnd, "Utrennii_tramvai");break;
 		case IDM_EXIT:				SendMessage(hwnd, WM_CLOSE, 0, 0);		break;
 		}
-
+		SetSkin(hwnd, g_sz_SKIN[skinID]);
 		DestroyMenu(cmMain);
 	}
 	break;
